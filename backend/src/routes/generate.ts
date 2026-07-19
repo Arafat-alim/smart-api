@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import { parseCollection } from '../parser';
+import { validatePostmanCollection } from '../validator';
 import { generateDocs } from '../generators/docs';
 import { generateSDK } from '../generators/sdk';
 import { generateCurlCommands } from '../generators/curl';
@@ -25,13 +26,21 @@ router.post('/generate', upload.single('collection'), async (req: Request, res: 
     return res.status(400).json({ error: 'Invalid JSON file' });
   }
 
-  let endpoints;
+  const validation = validatePostmanCollection(collection);
+  if (!validation.valid) {
+    return res.status(400).json({ error: 'Collection failed schema validation', details: validation.errors });
+  }
+
+  const baseUrlOverride = typeof req.body?.baseUrl === 'string' ? req.body.baseUrl.trim() : undefined;
+
+  let parsed;
   try {
-    endpoints = parseCollection(collection).endpoints;
+    parsed = parseCollection(collection, { baseUrlOverride });
   } catch (err: any) {
     return res.status(400).json({ error: err.message || 'Failed to parse collection' });
   }
 
+  const { baseUrl, endpoints } = parsed;
   const collectionName = collection.info?.name || 'API';
 
   try {
@@ -40,7 +49,7 @@ router.post('/generate', upload.single('collection'), async (req: Request, res: 
     const curl = generateCurlCommands(endpoints);
     const hooks = generateReactHooks(endpoints);
     const types = generateTypes(endpoints);
-    const openapi = generateOpenAPISpec(endpoints, collectionName);
+    const openapi = generateOpenAPISpec(endpoints, collectionName, baseUrl);
     const mockServer = generateMockServer(endpoints);
 
     const readme = [
@@ -69,6 +78,14 @@ router.post('/generate', upload.single('collection'), async (req: Request, res: 
       'README.md': readme,
     });
 
+    const endpointsMeta = endpoints.map((ep) => ({
+      name: ep.name,
+      method: ep.method,
+      path: ep.path,
+      apiType: ep.apiType,
+      authType: ep.auth.type,
+    }));
+
     res.json({
       docs,
       sdk,
@@ -77,6 +94,8 @@ router.post('/generate', upload.single('collection'), async (req: Request, res: 
       types,
       openapi,
       mockServer,
+      baseUrl,
+      endpointsMeta,
       zipBase64: zipBuffer.toString('base64'),
     });
   } catch (err) {
