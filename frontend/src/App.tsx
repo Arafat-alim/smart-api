@@ -1,3 +1,14 @@
+import { useState } from 'react';
+import Upload from './pages/Upload';
+import Results from './pages/Results';
+import { GenerateResponse } from './types';
+
 export default function App() {
-  return <div style={{ padding: '2rem', color: '#e2e8f0' }}>Smart API Builder — loading...</div>;
+  const [result, setResult] = useState<GenerateResponse | null>(null);
+
+  if (!result) {
+    return <Upload onGenerated={setResult} />;
+  }
+
+  return <Results result={result} onReset={() => setResult(null)} />;
 }
