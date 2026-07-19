@@ -6,7 +6,10 @@ interface Props {
   onReset: () => void;
 }
 
-const TABS: { key: keyof GenerateResponse; label: string }[] = [
+type TabKey = 'overview' | 'docs' | 'sdk' | 'curl' | 'hooks' | 'types' | 'openapi' | 'mockServer';
+
+const TABS: { key: TabKey; label: string }[] = [
+  { key: 'overview', label: 'Overview' },
   { key: 'docs', label: 'Docs' },
   { key: 'sdk', label: 'SDK' },
   { key: 'curl', label: 'cURL' },
@@ -16,8 +19,15 @@ const TABS: { key: keyof GenerateResponse; label: string }[] = [
   { key: 'mockServer', label: 'Mock Server' },
 ];
 
+const API_TYPE_CLASS: Record<string, string> = {
+  REST: 'badge-rest',
+  WEBHOOK: 'badge-webhook',
+  WEBSOCKET: 'badge-websocket',
+  SOAP: 'badge-soap',
+};
+
 export default function Results({ result, onReset }: Props) {
-  const [active, setActive] = useState<keyof GenerateResponse>('docs');
+  const [active, setActive] = useState<TabKey>('overview');
 
   function downloadZip() {
     const byteChars = atob(result.zipBase64);
@@ -45,6 +55,12 @@ export default function Results({ result, onReset }: Props) {
         </div>
       </div>
 
+      {result.baseUrl && (
+        <p className="base-url-display">
+          Base URL: <code>{result.baseUrl}</code>
+        </p>
+      )}
+
       <div className="tabs">
         {TABS.map((tab) => (
           <button
@@ -57,7 +73,38 @@ export default function Results({ result, onReset }: Props) {
         ))}
       </div>
 
-      <pre className="code-view">{result[active]}</pre>
+      {active === 'overview' ? (
+        <table className="overview-table">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Path</th>
+              <th>Name</th>
+              <th>API Type</th>
+              <th>Auth</th>
+            </tr>
+          </thead>
+          <tbody>
+            {result.endpointsMeta.map((ep, i) => (
+              <tr key={`${ep.method}-${ep.path}-${i}`}>
+                <td>{ep.method}</td>
+                <td>{ep.path}</td>
+                <td>{ep.name}</td>
+                <td>
+                  <span className={`badge ${API_TYPE_CLASS[ep.apiType] || 'badge-rest'}`}>{ep.apiType}</span>
+                </td>
+                <td>
+                  <span className={`badge ${ep.authType === 'none' ? 'badge-auth-none' : 'badge-auth-set'}`}>
+                    {ep.authType}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <pre className="code-view">{result[active]}</pre>
+      )}
     </div>
   );
 }
