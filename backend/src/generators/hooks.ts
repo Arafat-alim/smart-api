@@ -1,5 +1,5 @@
 import { Endpoint } from '../types';
-import { deriveFunctionName } from './util';
+import { deriveFunctionName, sanitizeForTemplateLiteral } from './util';
 
 export function generateReactHooks(endpoints: Endpoint[]): string {
   const lines: string[] = [
@@ -14,9 +14,10 @@ export function generateReactHooks(endpoints: Endpoint[]): string {
     const fnName = uniquify(deriveFunctionName(ep.method, ep.path), seen);
     const hookName = 'use' + fnName.charAt(0).toUpperCase() + fnName.slice(1);
     const isQuery = ep.method.toUpperCase() === 'GET';
+    const safePath = sanitizeForTemplateLiteral(ep.path);
 
     lines.push('/**');
-    lines.push(` * ${ep.method} ${ep.path}`);
+    lines.push(` * ${ep.method} ${safePath}`);
     lines.push(' */');
 
     if (isQuery) {
