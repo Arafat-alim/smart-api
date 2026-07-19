@@ -54,3 +54,11 @@ export function deriveTypeName(path: string): string {
 function singularizeExported(word: string): string {
   return singularize(word);
 }
+
+export function sanitizeForTemplateLiteral(str: string): string {
+  return str.replace(/`/g, "'").replace(/\$\{/g, '\\${').replace(/\*\//g, '');
+}
+
+export function sanitizeForSingleQuoteString(str: string): string {
+  return str.replace(/'/g, '');
+}

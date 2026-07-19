@@ -1,4 +1,5 @@
 import { Endpoint } from '../types';
+import { sanitizeForSingleQuoteString } from './util';
 
 export function generateMockServer(endpoints: Endpoint[]): string {
   const lines: string[] = [
@@ -19,7 +20,8 @@ export function generateMockServer(endpoints: Endpoint[]): string {
         ? JSON.stringify(ep.responseExample)
         : '{}';
 
-    lines.push(`app.${expressMethod}('${ep.path}', (req, res) => {`);
+    const safePath = sanitizeForSingleQuoteString(ep.path);
+    lines.push(`app.${expressMethod}('${safePath}', (req, res) => {`);
     lines.push(`  res.json(${body});`);
     lines.push('});');
     lines.push('');
