@@ -7,6 +7,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (_req, res) => {
+  res.json({ status: 'ok', service: 'Smart API Builder' });
+});
+
 app.get('/ping', (_req, res) => {
   res.send('pong');
 });
