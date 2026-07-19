@@ -1,0 +1,58 @@
+.lp-root {
+  /* Color — reuses the real app's palette (styles.css), extended with a violet gradient stop */
+  --lp-bg: #0b1120;
+  --lp-bg-raised: oklch(0.22 0.02 264);
+  --lp-surface: #1e293b;
+  --lp-surface-2: oklch(0.27 0.025 264);
+  --lp-border: #334155;
+  --lp-border-soft: oklch(0.32 0.02 264);
+  --lp-text: #e2e8f0;
+  --lp-text-dim: #94a3b8;
+  --lp-text-faint: #64748b;
+  --lp-indigo: #4f46e5;
+  --lp-indigo-light: #818cf8;
+  --lp-violet: #a855f7;
+  --lp-gradient: linear-gradient(100deg, var(--lp-indigo-light), var(--lp-violet));
+
+  /* Type — display: Schibsted Grotesk, body: Hanken Grotesk, code: JetBrains Mono */
+  --lp-font-display: 'Schibsted Grotesk', system-ui, sans-serif;
+  --lp-font-body: 'Hanken Grotesk', system-ui, sans-serif;
+  --lp-font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --lp-text-xs: 0.8125rem;
+  --lp-text-sm: 0.9375rem;
+  --lp-text-base: 1.0625rem;
+  --lp-text-lg: 1.375rem;
+  --lp-text-xl: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
+  --lp-text-2xl: clamp(2.25rem, 1.6rem + 2.8vw, 3.75rem);
+  --lp-text-3xl: clamp(2.75rem, 1.8rem + 4vw, 5rem);
+
+  --lp-leading-tight: 1.1;
+  --lp-leading-snug: 1.35;
+  --lp-leading-body: 1.65;
+
+  /* Space — 4pt scale, semantic names */
+  --lp-space-xs: 4px;
+  --lp-space-sm: 8px;
+  --lp-space-md: 16px;
+  --lp-space-lg: 24px;
+  --lp-space-xl: 32px;
+  --lp-space-2xl: 48px;
+  --lp-space-3xl: 64px;
+  --lp-space-4xl: 96px;
+  --lp-section-pad: clamp(64px, 8vw + 16px, 160px);
+
+  /* Motion */
+  --lp-ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+  --lp-ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --lp-dur-fast: 200ms;
+  --lp-dur-med: 400ms;
+  --lp-dur-slow: 700ms;
+
+  --lp-radius-sm: 8px;
+  --lp-radius-md: 14px;
+  --lp-radius-lg: 20px;
+  --lp-radius-pill: 999px;
+
+  --lp-max-width: 1180px;
+}

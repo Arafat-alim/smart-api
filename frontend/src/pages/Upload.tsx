@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { generate } from '../api/client';
 import { GenerateResponse } from '../types';
 
@@ -38,6 +39,7 @@ export default function Upload({ onGenerated }: Props) {
 
   return (
     <div className="upload-page">
+      <Link to="/" className="back-link">← Home</Link>
       <h1>Smart API Builder</h1>
       <p>Upload a Postman Collection (v2.1 JSON) to generate docs, SDK, hooks, types, OpenAPI spec, and a mock server.</p>
 

@@ -1,14 +1,12 @@
-import { useState } from 'react';
-import Upload from './pages/Upload';
-import Results from './pages/Results';
-import { GenerateResponse } from './types';
+import { Routes, Route } from 'react-router-dom';
+import Landing from './landing/Landing';
+import AppShell from './AppShell';
 
 export default function App() {
-  const [result, setResult] = useState<GenerateResponse | null>(null);
-
-  if (!result) {
-    return <Upload onGenerated={setResult} />;
-  }
-
-  return <Results result={result} onReset={() => setResult(null)} />;
+  return (
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/app/smart-api" element={<AppShell />} />
+    </Routes>
+  );
 }
