@@ -1,0 +1,35 @@
+{
+  "info": {
+    "name": "Sample API",
+    "schema": "https://schema.postman.com/collection/json/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "ListUsers",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://api.example.com/users",
+          "protocol": "http",
+          "host": ["api", "example", "com"],
+          "path": ["users"]
+        }
+      },
+      "response": [{ "code": 200, "body": "[{\"id\":1,\"name\":\"Alice\"}]" }]
+    },
+    {
+      "name": "CreateUser",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://api.example.com/users",
+          "protocol": "http",
+          "host": ["api", "example", "com"],
+          "path": ["users"]
+        },
+        "body": { "mode": "raw", "raw": "{\"name\":\"Bob\"}" }
+      },
+      "response": [{ "code": 201, "body": "{\"id\":2,\"name\":\"Bob\"}" }]
+    }
+  ]
+}

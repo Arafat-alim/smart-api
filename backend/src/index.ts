@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import generateRouter from './routes/generate';
 
 const app = express();
 
@@ -8,6 +9,13 @@ app.use(express.json());
 
 app.get('/ping', (_req, res) => {
   res.send('pong');
+});
+
+app.use('/api', generateRouter);
+
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error(err);
+  res.status(500).json({ error: 'Internal server error' });
 });
 
 const PORT = process.env.PORT || 4000;
