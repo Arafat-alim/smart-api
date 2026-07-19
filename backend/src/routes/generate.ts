@@ -27,7 +27,7 @@ router.post('/generate', upload.single('collection'), async (req: Request, res: 
 
   let endpoints;
   try {
-    endpoints = parseCollection(collection);
+    endpoints = parseCollection(collection).endpoints;
   } catch (err: any) {
     return res.status(400).json({ error: err.message || 'Failed to parse collection' });
   }
