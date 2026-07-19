@@ -7,7 +7,8 @@ export async function generate(file: File, baseUrl?: string): Promise<GenerateRe
     formData.append('baseUrl', baseUrl.trim());
   }
 
-  const res = await fetch('/api/generate', {
+  const baseUrl = import.meta.env.VITE_API_URL || '';
+  const res = await fetch(`${baseUrl}/api/generate`, {
     method: 'POST',
     body: formData,
   });
